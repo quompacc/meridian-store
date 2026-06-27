@@ -1,0 +1,19 @@
+[package]
+name = "meridian-stored"
+version = "0.2.0"
+edition = "2021"
+description = "Meridian Store — privileged transaction daemon for Arch Linux (polkit + D-Bus)"
+
+[[bin]]
+name = "meridian-stored"
+path = "src/main.rs"
+
+[dependencies]
+zbus = { version = "4", default-features = false, features = ["tokio"] }
+zbus_polkit = "4"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "process", "io-util", "sync"] }
+anyhow = "1"
+
+[profile.release]
+strip = true
+lto = true

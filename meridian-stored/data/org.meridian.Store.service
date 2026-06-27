@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=org.meridian.Store
+Exec=/usr/lib/meridian-stored
+User=root
+SystemdService=meridian-stored.service

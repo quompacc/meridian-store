@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Eduard Hart -->
+<component type="desktop-application">
+  <id>org.meridian.store</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>Meridian Store</name>
+  <summary>Software store for Arch Linux</summary>
+  <summary xml:lang="de">Software-Store für Arch Linux</summary>
+
+  <description>
+    <p>
+      Meridian Store is a KDE-native graphical software store for Arch Linux. It
+      installs and updates software from the official Arch Linux repositories, an
+      optional curated [meridian] repository, Flatpak (Flathub) and the AUR — each
+      source clearly trust-labelled. Native package transactions go through a
+      polkit-gated, unprivileged-by-default design; the AUR lane is opt-in and
+      pins every build to the reviewed commit.
+    </p>
+    <p xml:lang="de">
+      Der Meridian Store ist ein KDE-nativer grafischer Software-Store für Arch
+      Linux. Er installiert und aktualisiert Software aus den offiziellen
+      Arch-Linux-Repositorien, einem optionalen kuratierten [meridian]-Repositorium,
+      Flatpak (Flathub) und dem AUR — jede Quelle klar nach Vertrauen
+      gekennzeichnet. Native Paket-Transaktionen laufen über ein polkit-gesichertes,
+      standardmäßig unprivilegiertes Design; die AUR-Spur ist optional und nagelt
+      jeden Build auf den geprüften Commit fest.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">org.meridian.store.desktop</launchable>
+  <icon type="stock">org.meridian.store</icon>
+  <categories>
+    <category>System</category>
+    <category>PackageManager</category>
+  </categories>
+
+  <keywords>
+    <keyword>software</keyword>
+    <keyword>apps</keyword>
+    <keyword>install</keyword>
+    <keyword>package</keyword>
+    <keyword>arch</keyword>
+    <keyword>pacman</keyword>
+    <keyword>flatpak</keyword>
+    <keyword>aur</keyword>
+  </keywords>
+
+  <!-- TODO(publish): public homepage, and add <screenshots>. -->
+  <url type="homepage">https://github.com/quompacc/meridian-store</url>
+  <url type="bugtracker">https://github.com/quompacc/meridian-store/issues</url>
+
+  <developer id="org.meridian">
+    <name>MeridianOS</name>
+  </developer>
+
+  <content_rating type="oars-1.1"/>
+</component>

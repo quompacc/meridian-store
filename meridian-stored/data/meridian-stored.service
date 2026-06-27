@@ -1,0 +1,32 @@
+[Unit]
+Description=MeridianOS Store — privileged transaction daemon
+Documentation=file:///usr/share/doc/meridian-store/MERIDIAN_STORE_PLAN.md
+
+[Service]
+Type=dbus
+BusName=org.meridian.Store
+ExecStart=/usr/lib/meridian-stored
+
+# --- Hardening ---------------------------------------------------------------
+# This daemon's whole job is to mutate the system: pacman writes across / /usr
+# /etc /var /boot, installs setuid binaries and runs package scriptlets, and AUR
+# builds spin up mount/PID/user namespaces via makechrootpkg. So the usual heavy
+# knobs are DELIBERATELY left off — they would break the daemon's core function:
+#   * NoNewPrivileges=no    — makechrootpkg drops to a build user via sudo, and
+#                             pacman scriptlets may legitimately raise privileges.
+#   * no RestrictNamespaces — clean-chroot builds need to create namespaces.
+#   * no RestrictSUIDSGID   — installed packages legitimately ship setuid files.
+#   * no ProtectSystem      — pacman must write the whole system tree.
+#   * no SystemCallFilter   — nspawn/unshare/mount syscalls are required.
+# What we lock down are surfaces the daemon never legitimately touches:
+NoNewPrivileges=no
+ProtectHome=yes
+ProtectClock=yes
+ProtectKernelLogs=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+LockPersonality=yes
+RestrictRealtime=yes
+RestrictAddressFamilies=AF_UNIX AF_NETLINK AF_INET AF_INET6
+SystemCallArchitectures=native
+KeyringMode=private

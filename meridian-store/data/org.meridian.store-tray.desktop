@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Meridian Store Updates
+Name[de]=Meridian Store – Aktualisierungen
+Comment=Watch for software updates in the system tray
+Comment[de]=Im Systemabschnitt nach Software-Aktualisierungen sehen
+Exec=meridian-store --background
+Icon=org.meridian.store
+Terminal=false
+Categories=System;PackageManager;Qt;KDE;
+X-KDE-autostart-phase=2
+NoDisplay=true
+StartupNotify=false

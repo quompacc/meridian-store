@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Meridian Store
+Name[de]=Meridian Store
+GenericName=Software
+GenericName[de]=Software
+Comment=Install and manage software on Arch Linux
+Comment[de]=Software auf Arch Linux installieren und verwalten
+Exec=meridian-store
+Icon=org.meridian.store
+Terminal=false
+Categories=System;PackageManager;Qt;KDE;
+Keywords=software;apps;install;package;store;
+Keywords[de]=software;apps;installieren;paket;store;
+StartupNotify=true

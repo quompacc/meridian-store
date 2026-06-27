@@ -1,0 +1,100 @@
+# Maintainer: Eduard Hart <eduard.hart@gmail.com>
+#
+# meridian-store — a KDE-native graphical software store for Arch Linux.
+# Two components from one source:
+#   * meridian-store   — Qt6/QML + Kirigami GUI (catalog via AppStreamQt;
+#                        sources: official Arch repos + an optional curated
+#                        [meridian] repo, Flatpak and AUR)
+#   * meridian-stored  — privileged transaction daemon (system D-Bus, polkit)
+#
+# Standalone package: builds from a tagged release of the public meridian-store
+# repo. The Rust daemon fetches crates at build time → the build host needs
+# network (a clean-chroot build via devtools has it).
+#
+# TODO(publish): set b2sums from the
+# tagged tarball (updpkgsums), and — if mirroring to Codeberg — keep this URL as
+# the canonical source.
+
+pkgname=meridian-store
+pkgver=0.2.0
+pkgrel=1
+pkgdesc="KDE-native graphical software store for Arch Linux: official repos + [meridian], Flatpak and AUR, with a polkit-gated transaction daemon"
+arch=('x86_64')
+url="https://github.com/quompacc/meridian-store"
+license=('GPL-3.0-or-later')
+depends=(
+  'qt6-base' 'qt6-declarative'
+  'kirigami' 'ki18n'
+  'kstatusnotifieritem'                                  # system-tray update badge
+  'appstream' 'appstream-qt' 'archlinux-appstream-data'  # the catalog backbone
+  'pacman'                                               # libalpm (read-only state)
+  'pacman-contrib'                                        # checkupdates (root-free update check)
+  'fakeroot'                                              # checkupdates' private-DB sync
+  'polkit'                                               # daemon authorization
+  'flatpak'                                              # Flatpak source
+  'hicolor-icon-theme'
+)
+makedepends=('cmake' 'extra-cmake-modules' 'ninja' 'rust' 'cargo' 'python' 'python-numpy' 'python-pillow' 'librsvg')
+optdepends=('devtools: build AUR packages in a clean chroot')
+source=("${pkgname}-${pkgver}.tar.gz::${url}/archive/refs/tags/v${pkgver}.tar.gz")
+b2sums=('SKIP')   # TODO(publish): set with `updpkgsums` once the tag exists
+options=('!lto')
+
+build() {
+  local root="${pkgname}-${pkgver}"
+
+  # GUI (cmake/Qt)
+  cmake -S "${root}/meridian-store" -B build-gui -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build-gui
+
+  # Daemon (cargo). --locked: build exactly the pinned Cargo.lock.
+  ( cd "${root}/meridian-stored" && cargo build --release --locked )
+
+  # Icons: alpha-cut the store logo and the tray update icon from their
+  # flat-background asset renders.
+  ( cd "${root}" \
+      && python3 generators/gen-store-icon.py \
+      && python3 generators/gen-store-icon.py --src assets/update_icon.png \
+           --out dist/branding/meridian-store-updates.png )
+}
+
+package() {
+  local root="${pkgname}-${pkgver}"
+  local data="${root}/meridian-stored/data"
+
+  # --- GUI ---
+  DESTDIR="${pkgdir}" cmake --install build-gui
+  install -Dm644 "${root}/meridian-store/data/org.meridian.store.desktop" \
+      "${pkgdir}/usr/share/applications/org.meridian.store.desktop"
+  install -Dm644 "${root}/meridian-store/data/org.meridian.store.metainfo.xml" \
+      "${pkgdir}/usr/share/metainfo/org.meridian.store.metainfo.xml"
+  install -Dm644 "${root}/LICENSE" \
+      "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  install -Dm644 "${root}/docs/MERIDIAN_STORE_PLAN.md" \
+      "${pkgdir}/usr/share/doc/${pkgname}/MERIDIAN_STORE_PLAN.md"
+  # Tray watcher: autostart hidden, badges pending updates in the system tray.
+  install -Dm644 "${root}/meridian-store/data/org.meridian.store-tray.desktop" \
+      "${pkgdir}/etc/xdg/autostart/org.meridian.store-tray.desktop"
+  install -Dm644 "${root}/dist/branding/meridian-store.png" \
+      "${pkgdir}/usr/share/icons/hicolor/512x512/apps/org.meridian.store.png"
+  install -Dm644 "${root}/dist/branding/meridian-store-updates.png" \
+      "${pkgdir}/usr/share/icons/hicolor/512x512/apps/org.meridian.store-updates.png"
+
+  # --- daemon binary + AUR build helper ---
+  install -Dm755 "${root}/meridian-stored/target/release/meridian-stored" \
+      "${pkgdir}/usr/lib/meridian-stored"
+  install -Dm755 "${data}/build-aur.sh" \
+      "${pkgdir}/usr/lib/meridian-store/build-aur.sh"
+
+  # --- system integration: polkit, D-Bus, systemd ---
+  install -Dm644 "${data}/org.meridian.store.policy" \
+      "${pkgdir}/usr/share/polkit-1/actions/org.meridian.store.policy"
+  install -Dm644 "${data}/org.meridian.Store.conf" \
+      "${pkgdir}/usr/share/dbus-1/system.d/org.meridian.Store.conf"
+  install -Dm644 "${data}/org.meridian.Store.service" \
+      "${pkgdir}/usr/share/dbus-1/system-services/org.meridian.Store.service"
+  install -Dm644 "${data}/meridian-stored.service" \
+      "${pkgdir}/usr/lib/systemd/system/meridian-stored.service"
+}

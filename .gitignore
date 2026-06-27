@@ -1,0 +1,22 @@
+# Build output (reproducible from source)
+/meridian-store/build/
+/meridian-stored/target/
+
+# Generated branding (regenerate with generators/gen-store-icon.py)
+/dist/
+
+# Packaging build dirs (makepkg)
+/packaging/src/
+/packaging/pkg/
+*.pkg.tar.zst
+*.pkg.tar.zst.sig
+*.tar.gz
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Editor / OS cruft
+*.swp
+*~
+.DS_Store
