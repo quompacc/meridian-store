@@ -47,7 +47,24 @@
     <keyword>aur</keyword>
   </keywords>
 
-  <!-- TODO(publish): public homepage, and add <screenshots>. -->
+  <screenshots>
+    <screenshot type="default">
+      <caption>The landing page — software for Arch Linux</caption>
+      <caption xml:lang="de">Die Startseite — Software für Arch Linux</caption>
+      <image type="source">https://raw.githubusercontent.com/quompacc/meridian-store/main/docs/screenshots/landing.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Application detail page with screenshot gallery</caption>
+      <caption xml:lang="de">App-Detailseite mit Screenshot-Galerie</caption>
+      <image type="source">https://raw.githubusercontent.com/quompacc/meridian-store/main/docs/screenshots/app-detail.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Source settings: Flatpak and AUR with trust labels</caption>
+      <caption xml:lang="de">Quellen-Einstellungen: Flatpak und AUR mit Vertrauens-Kennzeichnung</caption>
+      <image type="source">https://raw.githubusercontent.com/quompacc/meridian-store/main/docs/screenshots/settings.png</image>
+    </screenshot>
+  </screenshots>
+
   <url type="homepage">https://github.com/quompacc/meridian-store</url>
   <url type="bugtracker">https://github.com/quompacc/meridian-store/issues</url>
 

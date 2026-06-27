@@ -7,6 +7,8 @@
 Official Arch repositories · an optional curated `[meridian]` repo · Flatpak · AUR —
 in one store, each source clearly trust-labelled.
 
+![The Meridian Store landing page on Arch Linux](docs/screenshots/landing.png)
+
 </div>
 
 ---
@@ -27,6 +29,17 @@ software from:
 
 It originates in **MeridianOS** (an Arch + KDE Plasma system) but runs on
 **any Arch Linux + KDE** install.
+
+## Screenshots
+
+Rich, app-store-style detail pages — screenshots, description, source and licence,
+with a one-click install/remove that goes through the polkit daemon:
+
+![Application detail page with screenshot gallery](docs/screenshots/app-detail.png)
+
+| Updates | Sources |
+|:---:|:---:|
+| ![Pending-updates view](docs/screenshots/updates.png) | ![Source settings: Flatpak and AUR toggles with trust labels](docs/screenshots/settings.png) |
 
 ## Architecture
 
